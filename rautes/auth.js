@@ -4,3 +4,5 @@ const { googleLogin } = require('../controlres/auth');
 const router  = Router();	
 
 router.post('/google', googleLogin);
+
+module.exports = router;
