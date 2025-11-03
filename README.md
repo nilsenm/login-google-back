@@ -1,5 +1,17 @@
 # login-google-back
 
+## Environment variables
+
+Create a `.env` file at the project root using the following template:
+
+```bash
+PORT=3000
+WEB_CLIENT_ID=TU_CLIENT_ID_WEB_DE_GOOGLE
+ANDROID_CLIENT_ID=TU_CLIENT_ID_ANDROID_DE_GOOGLE
+```
+
+Alternatively, copy `.env.example` to `.env` and fill your values.
+
 Backend básico con Express y JWT. Incluye configuración de dotenv.
 
 ## Scripts

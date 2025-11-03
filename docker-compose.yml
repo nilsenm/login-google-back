@@ -1,0 +1,48 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: loginback-mongo
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=rootpassword
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  mongo-express:
+    image: mongo-express:1.0.2-20
+    container_name: loginback-mongo-express
+    restart: unless-stopped
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=rootpassword
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_BASICAUTH=false
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongodb
+
+  app:
+    build: .
+    container_name: loginback-app
+    restart: unless-stopped
+    environment:
+      - PORT=3000
+      - MONGODB_URI=mongodb://root:rootpassword@mongodb:27017/loginback?authSource=admin
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    ports:
+      - "${PORT}:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo-data:
+
+

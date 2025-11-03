@@ -1,6 +1,9 @@
 const express = require('express');
 const bodyparser = require('body-parser');
-const jwt = require('jsonwebtoken'); 
+const jwt = require('jsonwebtoken');
+const http = require('http');
+const { Server } = require('socket.io'); 
+const mongoose = require('mongoose');
 
 require('dotenv').config();
 
@@ -9,6 +12,37 @@ app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 
 app.use('/', require('./rautes/auth'));
-app.listen(process.env.PORT || 3000, () => {
-    console.log(`Server is running on port ${process.env.PORT}`);
+
+const port = process.env.PORT || 5000;
+const server = http.createServer(app);
+const io = new Server(server, {
+	cors: {
+		origin: '*',
+		methods: ['GET', 'POST']
+	}
 });
+
+
+// CORS configured via Server constructor (v4)
+
+io.on('connection', (socket) => {
+    console.log('Cliente conectado', socket.id);
+
+    socket.on('disconnect', () => {
+        console.log('Cliente desconectado', socket.id);
+    });
+});
+
+const mongoUri = process.env.MONGODB_URI;
+
+mongoose.connect(mongoUri)
+    .then(() => {
+        console.log('Connected to MongoDB');
+        server.listen(port, () => {
+            console.log(`Server is running on port ${port}`);
+        });
+    })
+    .catch((err) => {
+        console.error('MongoDB connection error:', err.message);
+        process.exit(1);
+    });
