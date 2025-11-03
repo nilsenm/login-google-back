@@ -8,10 +8,23 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
+
+
+
+
+
+
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 
 app.use('/', require('./rautes/auth'));
+app.use('/users', require('./rautes/user'));
+
+
+
+
+
+
 
 const port = process.env.PORT || 5000;
 const server = http.createServer(app);

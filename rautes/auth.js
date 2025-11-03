@@ -11,4 +11,11 @@ router.get('/', (req, res) => {
 
 router.post('/google', googleLogin);
 
+router.post('/newuser', (req, res = response ) => {
+    res.json({
+        message: 'User created successfully',
+        user: req.body
+    });
+});
+
 module.exports = router;
