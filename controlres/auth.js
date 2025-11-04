@@ -105,8 +105,24 @@ const login = async (req, res = response) => {
     }
 }
 
+const renewToken = async (req, res = response) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const payload = await verifyToken(token);
+    res.json({
+        ok: true,
+        message: 'Token renewed',
+        token: token
+    });
+}
+    
+
+
+
+
+
 module.exports = {
     googleLogin, 
     newUser,
-    login
+    login,
+    renewToken
 }

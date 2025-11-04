@@ -1,6 +1,6 @@
 const { Router , response} = require('express');
 const { check } = require('express-validator');
-const { googleLogin , newUser , login } = require('../controlres/auth');
+const { googleLogin , newUser , login , renewToken} = require('../controlres/auth');
 const { connectDB } = require('../databse/config');
 const { validarCampos } = require('../Middlewares/validar-campos..js');
 const router  = Router();	
@@ -24,6 +24,9 @@ router.post('/login',
     check('password', 'El password es obligatorio').not().isEmpty(),
     validarCampos,
     login);
+
+
+router.get('/renew', validarJWT, renewToken);
 
 
 module.exports = router;
