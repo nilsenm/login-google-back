@@ -1,21 +1,29 @@
-const { Router } = require('express');
-const { googleLogin } = require('../controlres/auth');
+const { Router , response} = require('express');
+const { check } = require('express-validator');
+const { googleLogin , newUser , login } = require('../controlres/auth');
 const { connectDB } = require('../databse/config');
-
+const { validarCampos } = require('../Middlewares/validar-campos..js');
 const router  = Router();	
 
-router.get('/', (req, res) => {
-    connectDB();
-    res.send('Connected to MongoDB');
-});
+
 
 router.post('/google', googleLogin);
 
-router.post('/newuser', (req, res = response ) => {
-    res.json({
-        message: 'User created successfully',
-        user: req.body
-    });
-});
+
+
+router.post('/nuevo', 
+     check('name', 'El nombre es obligatorio').not().isEmpty(),
+     check('email', 'El email es obligatorio').isEmail(),
+     check('password', 'El password es obligatorio').not().isEmpty(),
+     validarCampos,
+     newUser);
+
+
+router.post('/login', 
+    check('email', 'El email es obligatorio').isEmail(),
+    check('password', 'El password es obligatorio').not().isEmpty(),
+    validarCampos,
+    login);
+
 
 module.exports = router;

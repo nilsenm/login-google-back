@@ -16,9 +16,16 @@ const app = express();
 
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
+app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'views')));
+// app.use(express.static(path.join(__dirname, 'uploads')));
+// app.use(express.static(path.join(__dirname, 'uploads/images')));
+// app.use(express.static(path.join(__dirname, 'uploads/images/users')));
+// app.use(express.static(path.join(__dirname, 'uploads/images/users/profile')));
 
-app.use('/', require('./rautes/auth'));
-app.use('/users', require('./rautes/user'));
+app.use('/user/', require('./rautes/auth'));
 
 
 
@@ -26,7 +33,8 @@ app.use('/users', require('./rautes/user'));
 
 
 
-const port = process.env.PORT || 5000;
+
+const port = process.env.PORT || 3001;
 const server = http.createServer(app);
 const io = new Server(server, {
 	cors: {
